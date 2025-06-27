@@ -3,13 +3,13 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\AuthRepositoryInterface;
 class AuthService{
-    public function __construct(protected AuthRepositoryInterface $authRepositoryInterface) {}
+    public function __construct(protected AuthRepositoryInterface $authRepository) {}
 
     public function register(array $data){
          try {
         $data['password'] = bcrypt($data['password']);
 
-        $user = $this->authRepositoryInterface->register($data);
+        $user = $this->authRepository->register($data);
 
         $token = auth()->login(user: $user); 
 
@@ -26,7 +26,7 @@ class AuthService{
     public function login(array $credentials)
 {
     try {
-        $token = $this->authRepositoryInterface->login($credentials);
+        $token = $this->authRepository->login($credentials);
 
         if (!$token) {
             return response()->json(['error' => 'Invalid email or password'], 401);
