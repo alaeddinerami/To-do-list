@@ -10,4 +10,12 @@ class AuthRepository implements AuthRepositoryInterface{
         return User::create($data);
 
     }
+    public function login(array $credentials)
+    {
+        if (!$token = auth()->attempt($credentials)) {
+            return false;
+        }
+
+        return $token;
+    }
 }

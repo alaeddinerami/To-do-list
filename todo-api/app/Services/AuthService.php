@@ -23,4 +23,24 @@ class AuthService{
         return response()->json(['error' => 'Server error'], 500);
     }
     }
+    public function login(array $credentials)
+{
+    try {
+        $token = $this->authRepositoryInterface->login($credentials);
+
+        if (!$token) {
+            return response()->json(['error' => 'Invalid email or password'], 401);
+        }
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => auth()->user(),   
+            'access_token' => $token,
+        ], 200);
+    } catch (\Exception $e) {
+        logger()->error('Login failed: ' . $e->getMessage());
+        return response()->json(['error' => 'Server error'], 500);
+    }
+}
+
 }
